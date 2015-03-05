@@ -1,0 +1,130 @@
+﻿@model camera.Models.ScanResult
+@{
+    ViewBag.Title = "Index";
+}
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/jquery.webcam.js")"></script>
+    <script>
+        // take picture every 5 seconds
+        //function doStuff() {
+        //    $('#captureBtn').trigger('click');
+        //    setTimeout(doStuff, 5000);
+        //}
+        //setTimeout(doStuff, 5000);
+        //$("#captureBtn").hide();
+        $("#Camera").webcam({
+            width: 320,
+            height: 240,
+            mode: "save",
+            swffile: "@Url.Content("~/Scripts/jscam.swf")",
+            onTick: function () { },
+            onSave: function () {
+
+            },
+            onCapture: function () {
+                webcam.save("@Url.Content("~/Home/Capture")/");
+                //if (webcam.save == true) {
+                //    $('#result').load('/Home/Success');
+                //}
+                //else {
+                //    //$('#result').load('/Home/Failure');
+                //}
+            },
+            debug: function () { },
+            onLoad: function () { }
+        });
+
+        var timer;
+        $(function () {
+            $('#dateTime').html(getDateTime());
+
+            // Do a $.ajax call and update start time in your database
+
+            timer = setTimeout(function () {
+                update();
+            }, 1000);
+
+            $('#btn').click(function () {
+                clearTimeout(timer);
+                var currentdatetime = getDateTime();
+
+                // Do a $.ajax call and update end time in your database
+            });
+        });
+
+        function update() {
+            $('#dateTime').html(getDateTime());
+
+            timer = setTimeout(function () {
+                update();
+
+            }, 1000);
+        }
+
+        function getDateTime() {
+            var currentdate = new Date();
+            var datetime = " " + currentdate.getDate() + "/"
+                        + (currentdate.getMonth() + 1) + "/"
+                        + currentdate.getFullYear() + " "
+                        + currentdate.getHours() + ":"
+                        + currentdate.getMinutes() + ":"
+                        + currentdate.getSeconds();
+            return datetime;
+        }
+        function Decode() {
+            $('#details').load('/Home/Decode');
+            //$('#result').load('/Home/Success');
+        }
+    </script>
+
+}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="bg-primary">
+                    <h2>Welcome to the TLS Car Park</h2>
+                </p>
+                <h3>Please Scan your Qr Code</h3>
+                <input type="button" value="Shoot!" onclick="webcam.capture();" id="captureBtn" />
+                <input type="button" value="Decode" onclick="Decode()" id="decodeBtn" />
+                <div id="Camera">
+                </div>
+                <div id="dateTime" class="badge"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="result">
+                </div>
+                <div id="details">
+                    @Ajax.ActionLink(
+                                        "Decode QR",
+                                        "Success",
+                                        "Home",
+                                        new AjaxOptions { UpdateTargetId = "details" }
+                                    )
+                </div>
+                <div>
+
+                    @*@if (Model.Photo != null)
+                        {
+                            <div style="float:left;margin-right:20px">
+                                <img width="75" height="75" src="@Url.Action("GetImage", "Home")" />
+                            </div>
+                        }*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="btn" type="button" value="Stop" />
+
