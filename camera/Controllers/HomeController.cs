@@ -13,6 +13,7 @@ using camera.DAL;
 using System.Net;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace camera.Controllers
 {
@@ -113,7 +114,7 @@ namespace camera.Controllers
                 //do something if todays date matches
                 if (currentday.Equals(date))
                 {
-                    ResultList(email);
+                    ResultList(1);
                 }
             }
         }
@@ -135,11 +136,90 @@ namespace camera.Controllers
             return PartialView("_Success");
         }
         [HttpGet]
-        public JsonResult ResultList(string email)
+        public JsonResult ResultByEmail()
+        {
+            //var stream = Request.InputStream;
+            //string dump;
+
+            //using (var reader = new StreamReader(stream))
+            //    dump = reader.ReadToEnd();
+
+            ////var path = Server.MapPath("~/test.jpg");
+            //int numBytes = (dump.Length) / 2;
+            //byte[] bytes = new byte[numBytes];
+
+            //for (int x = 0; x < numBytes; ++x)
+            //{
+            //    bytes[x] = Convert.ToByte(dump.Substring(x * 2, 2), 16);
+            //}
+            var path = Server.MapPath("~/test.jpg");
+
+            //set pattern for regex
+            string pattern = "(-)";
+            string date;
+            string email;
+            //byte[] imgbytes = String_To_Bytes2(dump);
+            Bitmap bmp = new Bitmap(path);
+            string res;
+            //TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
+            //Bitmap bitmap = (Bitmap)tc.ConvertFrom(imgbytes);
+            ////creates a new bitmap from the file in the path
+            //using (MemoryStream ms = new MemoryStream(bytes))
+            //{
+            //    bmp = new Bitmap(ms);
+            //}
+            //tries to scan the qr image converted from above
+            //try
+            //{
+            //    //new instance of barcode reader
+
+            //    //send result for more processing
+            //    //ProcessCode(res);
+            //}
+            //catch
+            //{
+            //    //throw error if qr cannot be scanned
+            //    throw new Exception("Cannot decode the QR code");
+            //}
+            try
+            {
+                BarcodeReader reader = new BarcodeReader { AutoRotate = true, TryHarder = true };
+                //declare result equal to the decoding of the bitmap
+                Result result = reader.Decode(bmp);
+                //store res in string variable
+                res = result.Text;
+            }
+            //declare input = res 
+            //string input = res;
+            //get the current date 
+            finally
+            {
+                res = "Login Failed-" + System.DateTime.Today.ToShortDateString();
+            }
+
+            string[] substrings = Regex.Split(res, pattern);    // Split on hyphens
+            email = substrings[0];
+            date = substrings[2];
+            var umail = from u in db.Users
+                        where u.Name == email
+                        select new
+                        {
+                            u.UserID,
+                            u.Name, // other Customer properties you desire
+                        };
+            //do something if todays date matches
+            //if (currentday.Equals(date))
+            //{
+            //    //ResultList(email);
+            //}
+            return Json(umail, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult ResultList(int id)
         {
             //query to grab user details based on email match in db
             var jsonResult = from u in db.Users
-                             where u.Email == email
+                             where u.UserID == id
                              select new
                                  {
                                      u.UserID,

@@ -20,10 +20,10 @@
             swffile: "@Url.Content("~/Scripts/jscam.swf")",
             onTick: function () { },
             onSave: function () {
-
+                GetResultJSON();
             },
             onCapture: function () {
-                webcam.save("@Url.Content("~/Home/Capture")/");
+               webcam.save("@Url.Content("~/Home/Capture")/");
                 //if (webcam.save == true) {
                 //    $('#result').load('/Home/Success');
                 //}
@@ -75,8 +75,19 @@
         function Decode() {
             $('#result').load('/Home/Decode');
         }
+        function GetResultJSON() {
+            $.getJSON('/Home/ResultByEmail/', function (data) {
+                var items = '<table><tr><th>Name</th><th>ID</th></tr>';
+                $.each(data, function (i, user) {
+                    items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
+                });
+                items += "</table>";
+
+                $('#jsonresult').html(items);
+            });
+        }
         function GetResult() {
-            $.getJSON('/Home/ResultList/' + $('#UserEmail').val(), function (data) {
+            $.getJSON('/Home/ResultList/' + $('#UserId').val(), function (data) {
                 var items = '<table><tr><th>Name</th><th>ID</th></tr>';
                 $.each(data, function (i, user) {
                     items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
@@ -105,12 +116,16 @@
             </div>
             <div class="col-md-6">
                 <div id="result">
+                    <p id="jsonresult">
+                    </p>
                     <p id="rData">
                     </p>
-
                     <p>
-                        Enter Email: @Html.TextBox("UserEmail")
-                        <input type="submit" id="GetResult" onclick="GetResult()" value="Submit" />
+                        Enter ID: @Html.TextBox("UserId")
+                        <input type="submit" id="GetResult" onclick="GetResult()" value="Get JSON by ID" />
+                    </p>
+                    <p>
+                        <input type="submit" id="GetResultJSON" onclick="GetResultJSON()" value="Get JSON" />
                     </p>
                 </div>
             </div>
