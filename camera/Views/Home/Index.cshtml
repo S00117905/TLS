@@ -1,4 +1,4 @@
-﻿@model camera.Models.ScanResult
+﻿@model camera.Models.User
 @{
     ViewBag.Title = "Index";
 }
@@ -20,10 +20,10 @@
             swffile: "@Url.Content("~/Scripts/jscam.swf")",
             onTick: function () { },
             onSave: function () {
-
+                GetResultJSON();
             },
             onCapture: function () {
-                webcam.save("@Url.Content("~/Home/Capture")/");
+               webcam.save("@Url.Content("~/Home/Capture")/");
                 //if (webcam.save == true) {
                 //    $('#result').load('/Home/Success');
                 //}
@@ -73,21 +73,33 @@
             return datetime;
         }
         function Decode() {
-            $('#details').load('/Home/Decode');
-            //$('#result').load('/Home/Success');
+            $('#result').load('/Home/Decode');
+        }
+        function GetResultJSON() {
+            $.getJSON('/Home/ResultByEmail/', function (data) {
+                var items = '<table><tr><th>Name</th><th>ID</th></tr>';
+                $.each(data, function (i, user) {
+                    items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
+                });
+                items += "</table>";
+
+                $('#jsonresult').html(items);
+            });
+        }
+        function GetResult() {
+            $.getJSON('/Home/ResultList/' + $('#UserId').val(), function (data) {
+                var items = '<table><tr><th>Name</th><th>ID</th></tr>';
+                $.each(data, function (i, user) {
+                    items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
+                });
+                items += "</table>";
+
+                $('#rData').html(items);
+            });
         }
     </script>
 
 }
-
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-            </a>
-        </div>
-    </div>
-</nav>
 <div class="jumbotron">
     <div class="container">
         <div class="row">
@@ -104,23 +116,17 @@
             </div>
             <div class="col-md-6">
                 <div id="result">
-                </div>
-                <div id="details">
-                    @Ajax.ActionLink(
-                                        "Decode QR",
-                                        "Success",
-                                        "Home",
-                                        new AjaxOptions { UpdateTargetId = "details" }
-                                    )
-                </div>
-                <div>
-
-                    @*@if (Model.Photo != null)
-                        {
-                            <div style="float:left;margin-right:20px">
-                                <img width="75" height="75" src="@Url.Action("GetImage", "Home")" />
-                            </div>
-                        }*@
+                    <p id="jsonresult">
+                    </p>
+                    <p id="rData">
+                    </p>
+                    <p>
+                        Enter ID: @Html.TextBox("UserId")
+                        <input type="submit" id="GetResult" onclick="GetResult()" value="Get JSON by ID" />
+                    </p>
+                    <p>
+                        <input type="submit" id="GetResultJSON" onclick="GetResultJSON()" value="Get JSON" />
+                    </p>
                 </div>
             </div>
         </div>
