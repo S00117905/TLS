@@ -95,3 +95,4 @@ C:\Users\Supernatix\Downloads\camera\camera\bin\zxing.presentation.pdb
 C:\Users\Supernatix\Downloads\camera\camera\bin\zxing.presentation.xml
 C:\Users\Supernatix\Downloads\camera\camera\obj\Debug\camera.pdb
 C:\Users\Supernatix\Downloads\camera\camera\bin\MySql.Data.Entity.dll
+C:\Users\Neil\Documents\Project\camera\camera\bin\MySql.Data.Entity.dll
