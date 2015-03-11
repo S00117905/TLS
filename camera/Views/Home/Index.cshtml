@@ -72,14 +72,11 @@
                         + currentdate.getSeconds();
             return datetime;
         }
-        function Decode() {
-            $('#result').load('/Home/Decode');
-        }
         function GetResultJSON() {
             $.getJSON('/Home/ResultByEmail/', function (data) {
-                var items = '<table><tr><th>Name</th><th>ID</th></tr>';
+                var items = '<h3>Thank you for using TLS Parking Systems. Please enter car park.</h3></br><table class="table table-bordered"><tr><th>Name</th><th>ID</th></tr>';
                 $.each(data, function (i, user) {
-                    items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
+                    items += "<tr><td>" + user.CustomerName + "</td><td>" + user.CustomerID + "</td></tr>";
                 });
                 items += "</table>";
 
@@ -88,9 +85,9 @@
         }
         function GetResult() {
             $.getJSON('/Home/ResultList/' + $('#UserId').val(), function (data) {
-                var items = '<table><tr><th>Name</th><th>ID</th></tr>';
+                var items = '<table class="table table-bordered"><tr><th>Name</th><th>ID</th></tr>';
                 $.each(data, function (i, user) {
-                    items += "<tr><td>" + user.Name + "</td><td>" + user.UserID + "</td></tr>";
+                    items += "<tr><td>" + user.CustomerName + "</td><td>" + user.CustomerID + "</td></tr>";
                 });
                 items += "</table>";
 
@@ -101,7 +98,7 @@
 
 }
 <div class="jumbotron">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
                 <p class="bg-primary">
@@ -109,7 +106,6 @@
                 </p>
                 <h3>Please Scan your Qr Code</h3>
                 <input type="button" value="Shoot!" onclick="webcam.capture();" id="captureBtn" />
-                <input type="button" value="Decode" onclick="Decode()" id="decodeBtn" />
                 <div id="Camera">
                 </div>
                 <div id="dateTime" class="badge"></div>
@@ -118,19 +114,14 @@
                 <div id="result">
                     <p id="jsonresult">
                     </p>
-                    <p id="rData">
-                    </p>
+                    <p id="rData"></p>
                     <p>
-                        Enter ID: @Html.TextBox("UserId")
+                        Enter ID: @Html.TextBox("UserId",null , new { @class = "form-control" })
                         <input type="submit" id="GetResult" onclick="GetResult()" value="Get JSON by ID" />
-                    </p>
-                    <p>
-                        <input type="submit" id="GetResultJSON" onclick="GetResultJSON()" value="Get JSON" />
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<input id="btn" type="button" value="Stop" />
 

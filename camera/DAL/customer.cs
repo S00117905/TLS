@@ -16,7 +16,7 @@ namespace camera.DAL
     {
         public customer()
         {
-            this.customeracounts = new HashSet<customeracount>();
+            this.customeraccounts = new HashSet<customeraccount>();
         }
     
         public int CustomerID { get; set; }
@@ -34,7 +34,7 @@ namespace camera.DAL
         public System.DateTime updated_at { get; set; }
         public int remember_token { get; set; }
     
-        public virtual ICollection<customeracount> customeracounts { get; set; }
+        public virtual ICollection<customeraccount> customeraccounts { get; set; }
         public virtual vehicle vehicle { get; set; }
     }
 }

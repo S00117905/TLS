@@ -43,7 +43,7 @@
           <Property Name="updated_at" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="remember_token" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="customeracount">
+        <EntityType Name="customeraccount">
           <Key>
             <PropertyRef Name="CustomerAccountID" />
           </Key>
@@ -128,30 +128,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="customeracount_ibfk_1">
+        <Association Name="customeraccount_ibfk_1">
           <End Role="customer" Type="Self.customer" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="customeracount" Type="Self.customeracount" Multiplicity="*" />
+          <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="customeracount">
+            <Dependent Role="customeraccount">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="customeracount_ibfk_2">
+        <Association Name="customeraccount_ibfk_2">
           <End Role="parking" Type="Self.parking" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="customeracount" Type="Self.customeracount" Multiplicity="*" />
+          <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="parking">
               <PropertyRef Name="ParkingID" />
             </Principal>
-            <Dependent Role="customeracount">
+            <Dependent Role="customeraccount">
               <PropertyRef Name="ParkingID" />
             </Dependent>
           </ReferentialConstraint>
@@ -247,13 +247,6 @@
         <Function Name="insert_carparkprovider" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
           <Parameter Name="ProviderName" Type="varchar" Mode="In" />
           <Parameter Name="ActiveAccountNum" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="insert_carparks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
-          <Parameter Name="carparkname" Type="varchar" Mode="In" />
-          <Parameter Name="GPS" Type="varchar" Mode="In" />
-          <Parameter Name="spaces" Type="int" Mode="In" />
-          <Parameter Name="rateiD" Type="int" Mode="In" />
-          <Parameter Name="providerid" Type="int" Mode="In" />
         </Function>
         <Function Name="insert_customer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -360,7 +353,7 @@
           <EntitySet Name="carparkprovider" EntityType="Self.carparkprovider" Schema="tls_db" store:Type="Tables" />
           <EntitySet Name="carparks" EntityType="Self.carparks" Schema="tls_db" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="tls_db" store:Type="Tables" />
-          <EntitySet Name="customeracount" EntityType="Self.customeracount" Schema="tls_db" store:Type="Tables" />
+          <EntitySet Name="customeraccount" EntityType="Self.customeraccount" Schema="tls_db" store:Type="Tables" />
           <EntitySet Name="customervehicle" EntityType="Self.customervehicle" Schema="tls_db" store:Type="Tables" />
           <EntitySet Name="parking" EntityType="Self.parking" Schema="tls_db" store:Type="Tables" />
           <EntitySet Name="rates" EntityType="Self.rates" Schema="tls_db" store:Type="Tables" />
@@ -374,13 +367,13 @@
             <End Role="rates" EntitySet="rates" />
             <End Role="carparks" EntitySet="carparks" />
           </AssociationSet>
-          <AssociationSet Name="customeracount_ibfk_1" Association="Self.customeracount_ibfk_1">
+          <AssociationSet Name="customeraccount_ibfk_1" Association="Self.customeraccount_ibfk_1">
             <End Role="customer" EntitySet="customer" />
-            <End Role="customeracount" EntitySet="customeracount" />
+            <End Role="customeraccount" EntitySet="customeraccount" />
           </AssociationSet>
-          <AssociationSet Name="customeracount_ibfk_2" Association="Self.customeracount_ibfk_2">
+          <AssociationSet Name="customeraccount_ibfk_2" Association="Self.customeraccount_ibfk_2">
             <End Role="parking" EntitySet="parking" />
-            <End Role="customeracount" EntitySet="customeracount" />
+            <End Role="customeraccount" EntitySet="customeraccount" />
           </AssociationSet>
           <AssociationSet Name="customervehicle_ibfk_1" Association="Self.customervehicle_ibfk_1">
             <End Role="vehicle" EntitySet="vehicle" />
@@ -445,10 +438,10 @@
           <Property Name="created_at" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="updated_at" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="remember_token" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="customeracounts" Relationship="Self.customeracount_ibfk_1" FromRole="customer" ToRole="customeracount" />
+          <NavigationProperty Name="customeraccounts" Relationship="Self.customeraccount_ibfk_1" FromRole="customer" ToRole="customeraccount" />
           <NavigationProperty Name="vehicle" Relationship="Self.customervehicle" FromRole="customer" ToRole="vehicle" />
         </EntityType>
-        <EntityType Name="customeracount">
+        <EntityType Name="customeraccount">
           <Key>
             <PropertyRef Name="CustomerAccountID" />
           </Key>
@@ -459,8 +452,8 @@
           <Property Name="TransactionAmount" Type="Double" Nullable="false" />
           <Property Name="CurrentBalance" Type="Double" Nullable="false" />
           <Property Name="TransactionDate" Type="DateTime" Nullable="false" />
-          <NavigationProperty Name="customer" Relationship="Self.customeracount_ibfk_1" FromRole="customeracount" ToRole="customer" />
-          <NavigationProperty Name="parking" Relationship="Self.customeracount_ibfk_2" FromRole="customeracount" ToRole="parking" />
+          <NavigationProperty Name="customer" Relationship="Self.customeraccount_ibfk_1" FromRole="customeraccount" ToRole="customer" />
+          <NavigationProperty Name="parking" Relationship="Self.customeraccount_ibfk_2" FromRole="customeraccount" ToRole="parking" />
         </EntityType>
         <EntityType Name="parking">
           <Key>
@@ -474,7 +467,7 @@
           <Property Name="Duration" Type="Time" />
           <Property Name="Cost" Type="Double" />
           <NavigationProperty Name="carpark" Relationship="Self.parking_ibfk_2" FromRole="parking" ToRole="carparks" />
-          <NavigationProperty Name="customeracounts" Relationship="Self.customeracount_ibfk_2" FromRole="parking" ToRole="customeracount" />
+          <NavigationProperty Name="customeraccounts" Relationship="Self.customeraccount_ibfk_2" FromRole="parking" ToRole="customeraccount" />
         </EntityType>
         <EntityType Name="rate">
           <Key>
@@ -548,30 +541,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="customeracount_ibfk_1">
+        <Association Name="customeraccount_ibfk_1">
           <End Role="customer" Type="Self.customer" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="customeracount" Type="Self.customeracount" Multiplicity="*" />
+          <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="customeracount">
+            <Dependent Role="customeraccount">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="customeracount_ibfk_2">
+        <Association Name="customeraccount_ibfk_2">
           <End Role="parking" Type="Self.parking" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="customeracount" Type="Self.customeracount" Multiplicity="*" />
+          <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="parking">
               <PropertyRef Name="ParkingID" />
             </Principal>
-            <Dependent Role="customeracount">
+            <Dependent Role="customeraccount">
               <PropertyRef Name="ParkingID" />
             </Dependent>
           </ReferentialConstraint>
@@ -598,7 +591,7 @@
           <EntitySet Name="carparkproviders" EntityType="Self.carparkprovider" />
           <EntitySet Name="carparks" EntityType="Self.carpark" />
           <EntitySet Name="customers" EntityType="Self.customer" />
-          <EntitySet Name="customeracounts" EntityType="Self.customeracount" />
+          <EntitySet Name="customeraccounts" EntityType="Self.customeraccount" />
           <EntitySet Name="parkings" EntityType="Self.parking" />
           <EntitySet Name="rates" EntityType="Self.rate" />
           <EntitySet Name="ratetypes" EntityType="Self.ratetype" />
@@ -615,13 +608,13 @@
             <End Role="carparks" EntitySet="carparks" />
             <End Role="parking" EntitySet="parkings" />
           </AssociationSet>
-          <AssociationSet Name="customeracount_ibfk_1" Association="Self.customeracount_ibfk_1">
+          <AssociationSet Name="customeraccount_ibfk_1" Association="Self.customeraccount_ibfk_1">
             <End Role="customer" EntitySet="customers" />
-            <End Role="customeracount" EntitySet="customeracounts" />
+            <End Role="customeraccount" EntitySet="customeraccounts" />
           </AssociationSet>
-          <AssociationSet Name="customeracount_ibfk_2" Association="Self.customeracount_ibfk_2">
+          <AssociationSet Name="customeraccount_ibfk_2" Association="Self.customeraccount_ibfk_2">
             <End Role="parking" EntitySet="parkings" />
-            <End Role="customeracount" EntitySet="customeracounts" />
+            <End Role="customeraccount" EntitySet="customeraccounts" />
           </AssociationSet>
           <AssociationSet Name="rates_ibfk_2" Association="Self.rates_ibfk_2">
             <End Role="ratetype" EntitySet="ratetypes" />
@@ -679,9 +672,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="customeracounts">
-            <EntityTypeMapping TypeName="tls_dbModel.customeracount">
-              <MappingFragment StoreEntitySet="customeracount">
+          <EntitySetMapping Name="customeraccounts">
+            <EntityTypeMapping TypeName="tls_dbModel.customeraccount">
+              <MappingFragment StoreEntitySet="customeraccount">
                 <ScalarProperty Name="CustomerAccountID" ColumnName="CustomerAccountID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="ParkingID" ColumnName="ParkingID" />

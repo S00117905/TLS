@@ -19,9 +19,10 @@ namespace camera.Controllers
 {
     public class HomeController : Controller
     {
+        
         //declares connection to test db context
-        private TLSContext db = new TLSContext();
-
+        //private TLSContext db = new TLSContext();
+        private tls_dbEntities db = new tls_dbEntities();
         // GET: /Home/
         public ActionResult Index()
         {
@@ -161,26 +162,6 @@ namespace camera.Controllers
             //byte[] imgbytes = String_To_Bytes2(dump);
             Bitmap bmp = new Bitmap(path);
             string res;
-            //TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
-            //Bitmap bitmap = (Bitmap)tc.ConvertFrom(imgbytes);
-            ////creates a new bitmap from the file in the path
-            //using (MemoryStream ms = new MemoryStream(bytes))
-            //{
-            //    bmp = new Bitmap(ms);
-            //}
-            //tries to scan the qr image converted from above
-            //try
-            //{
-            //    //new instance of barcode reader
-
-            //    //send result for more processing
-            //    //ProcessCode(res);
-            //}
-            //catch
-            //{
-            //    //throw error if qr cannot be scanned
-            //    throw new Exception("Cannot decode the QR code");
-            //}
             try
             {
                 BarcodeReader reader = new BarcodeReader { AutoRotate = true, TryHarder = true };
@@ -189,41 +170,42 @@ namespace camera.Controllers
                 //store res in string variable
                 res = result.Text;
             }
-            //declare input = res 
-            //string input = res;
             //get the current date 
-            finally
+            catch
             {
                 res = "Login Failed-" + System.DateTime.Today.ToShortDateString();
             }
 
             string[] substrings = Regex.Split(res, pattern);    // Split on hyphens
+            //store values in seperate string 
             email = substrings[0];
             date = substrings[2];
-            var umail = from u in db.Users
-                        where u.Name == email
-                        select new
-                        {
-                            u.UserID,
-                            u.Name, // other Customer properties you desire
-                        };
+            //query mysql db
+            var udet = from ca in db.customers
+                       where ca.email == email
+                       select new
+                       {
+                           ca.CustomerName,
+                           ca.CustomerID
+                       };
+            
             //do something if todays date matches
             //if (currentday.Equals(date))
             //{
             //    //ResultList(email);
             //}
-            return Json(umail, JsonRequestBehavior.AllowGet);
+            return Json(udet, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         public JsonResult ResultList(int id)
         {
             //query to grab user details based on email match in db
-            var jsonResult = from u in db.Users
-                             where u.UserID == id
+            var jsonResult = from ca in db.customers
+                             where ca.CustomerID == id
                              select new
                                  {
-                                     u.UserID,
-                                     u.Name, // other Customer properties you desire
+                                     ca.CustomerID,
+                                     ca.CustomerName, // other Customer properties you desire
                                  };
             //returns json result
             return Json(jsonResult, JsonRequestBehavior.AllowGet);

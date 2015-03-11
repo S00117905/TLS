@@ -1,4 +1,390 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="testModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="testModelStoreContainer" />
+<Schema Namespace="tls_dbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="carparkprovider">
+    <Key>
+      <PropertyRef Name="CarparkProviderID" />
+    </Key>
+    <Property Name="CarparkProviderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProviderName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ActiveAccountNum" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="carparks">
+    <Key>
+      <PropertyRef Name="CarparkID" />
+    </Key>
+    <Property Name="CarparkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CarparkName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="GPSLocation" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Spaces" Type="int" Nullable="false" />
+    <Property Name="RateID" Type="int" Nullable="false" />
+    <Property Name="CarparkProviderID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CustomerSurname" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CustomerAddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="password_temp" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="code" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="active" Type="int" Nullable="false" />
+    <Property Name="created_at" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="updated_at" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="remember_token" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="customeraccount">
+    <Key>
+      <PropertyRef Name="CustomerAccountID" />
+    </Key>
+    <Property Name="CustomerAccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="ParkingID" Type="int" />
+    <Property Name="TransactionType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TransactionAmount" Type="double" Nullable="false" />
+    <Property Name="CurrentBalance" Type="double" Nullable="false" />
+    <Property Name="TransactionDate" Type="datetime" Precision="0" Nullable="false" />
+  </EntityType>
+  <EntityType Name="customervehicle">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="VehicleID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="parking">
+    <Key>
+      <PropertyRef Name="ParkingID" />
+    </Key>
+    <Property Name="ParkingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="CarparkID" Type="int" Nullable="false" />
+    <Property Name="TimeIn" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TimeOut" Type="datetime" Precision="0" />
+    <Property Name="Duration" Type="time" Precision="0" />
+    <Property Name="Cost" Type="double" />
+  </EntityType>
+  <EntityType Name="rates">
+    <Key>
+      <PropertyRef Name="RateID" />
+    </Key>
+    <Property Name="RateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RateTypeID" Type="int" Nullable="false" />
+    <Property Name="Rate" Type="double" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="0" Nullable="false" />
+    <Property Name="EndTime" Type="time" Precision="0" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ratetype">
+    <Key>
+      <PropertyRef Name="RateTypeID" />
+    </Key>
+    <Property Name="RateTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RateType" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="vehicle">
+    <Key>
+      <PropertyRef Name="VehicleID" />
+    </Key>
+    <Property Name="VehicleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicleRegNum" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="Make" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Model" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <Association Name="carparks_ibfk_2">
+    <End Role="carparkprovider" Type="Self.carparkprovider" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="carparks" Type="Self.carparks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="carparkprovider">
+        <PropertyRef Name="CarparkProviderID" />
+      </Principal>
+      <Dependent Role="carparks">
+        <PropertyRef Name="CarparkProviderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="carparks_ibfk_3">
+    <End Role="rates" Type="Self.rates" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="carparks" Type="Self.carparks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rates">
+        <PropertyRef Name="RateID" />
+      </Principal>
+      <Dependent Role="carparks">
+        <PropertyRef Name="RateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customeraccount_ibfk_1">
+    <End Role="customer" Type="Self.customer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="customeraccount">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customeraccount_ibfk_2">
+    <End Role="parking" Type="Self.parking" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="parking">
+        <PropertyRef Name="ParkingID" />
+      </Principal>
+      <Dependent Role="customeraccount">
+        <PropertyRef Name="ParkingID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customervehicle_ibfk_1">
+    <End Role="vehicle" Type="Self.vehicle" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customervehicle" Type="Self.customervehicle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vehicle">
+        <PropertyRef Name="VehicleID" />
+      </Principal>
+      <Dependent Role="customervehicle">
+        <PropertyRef Name="VehicleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customervehicle_ibfk_2">
+    <End Role="customer" Type="Self.customer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customervehicle" Type="Self.customervehicle" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="customervehicle">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="parking_ibfk_2">
+    <End Role="carparks" Type="Self.carparks" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="parking" Type="Self.parking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="carparks">
+        <PropertyRef Name="CarparkID" />
+      </Principal>
+      <Dependent Role="parking">
+        <PropertyRef Name="CarparkID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="rates_ibfk_2">
+    <End Role="ratetype" Type="Self.ratetype" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="rates" Type="Self.rates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ratetype">
+        <PropertyRef Name="RateTypeID" />
+      </Principal>
+      <Dependent Role="rates">
+        <PropertyRef Name="RateTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="customer_login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="username" Type="varchar" Mode="In" />
+    <Parameter Name="password" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="get_current_balance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="CustomerID" Type="int" Mode="In" />
+    <Parameter Name="Balance" Type="int" Mode="Out" />
+  </Function>
+  <Function Name="get_current_parking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="CustomerID" Type="int" Mode="In" />
+    <Parameter Name="pId" Type="int" Mode="Out" />
+  </Function>
+  <Function Name="get_current_parking_cost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="customerId" Type="int" Mode="In" />
+    <Parameter Name="currCost" Type="double" Mode="Out" />
+    <Parameter Name="timeDiff" Type="time" Mode="Out" />
+  </Function>
+  <Function Name="get_custname_cparktime_amount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="CustomerID" Type="int" Mode="In" />
+    <Parameter Name="CustomerName" Type="varchar" Mode="Out" />
+    <Parameter Name="currCost" Type="double" Mode="Out" />
+    <Parameter Name="parkingTime" Type="int" Mode="Out" />
+    <Parameter Name="CurrentBalance" Type="double" Mode="Out" />
+  </Function>
+  <Function Name="get_parking_cost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="inCustomerID" Type="int" Mode="In" />
+    <Parameter Name="outParkingCost" Type="double" Mode="Out" />
+  </Function>
+  <Function Name="get_recent_parking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="customerId" Type="int" Mode="In" />
+    <Parameter Name="pId" Type="int" Mode="Out" />
+  </Function>
+  <Function Name="insert_carparkprovider" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="ProviderName" Type="varchar" Mode="In" />
+    <Parameter Name="ActiveAccountNum" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="insert_customer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="Username" Type="varchar" Mode="In" />
+    <Parameter Name="CustomerName" Type="varchar" Mode="In" />
+    <Parameter Name="CustomerSurname" Type="varchar" Mode="In" />
+    <Parameter Name="CustomerAddress" Type="varchar" Mode="In" />
+    <Parameter Name="PhoneNumber" Type="varchar" Mode="In" />
+    <Parameter Name="Email" Type="varchar" Mode="In" />
+    <Parameter Name="Password" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="insert_customeraccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="customerid" Type="int" Mode="In" />
+    <Parameter Name="parkingid" Type="int" Mode="In" />
+    <Parameter Name="transactiontype" Type="varchar" Mode="In" />
+    <Parameter Name="transactionamount" Type="double" Mode="In" />
+    <Parameter Name="currentbalance" Type="double" Mode="In" />
+    <Parameter Name="transactiondate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="insert_parking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="inCustomerID" Type="int" Mode="In" />
+    <Parameter Name="inCarParkID" Type="int" Mode="In" />
+    <Parameter Name="inTimeIn" Type="datetime" Mode="In" />
+    <Parameter Name="outParkingID" Type="int" Mode="Out" />
+  </Function>
+  <Function Name="insert_rates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="ratetypeid" Type="int" Mode="In" />
+    <Parameter Name="rate" Type="double" Mode="In" />
+    <Parameter Name="starttime" Type="time" Mode="In" />
+    <Parameter Name="endtime" Type="time" Mode="In" />
+  </Function>
+  <Function Name="insert_ratetype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="type" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="insert_topup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="customerId" Type="int" Mode="In" />
+    <Parameter Name="Amount" Type="double" Mode="In" />
+  </Function>
+  <Function Name="insert_vehicle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="regnum" Type="varchar" Mode="In" />
+    <Parameter Name="make" Type="varchar" Mode="In" />
+    <Parameter Name="model" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="update_carparkprovider" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="name" Type="varchar" Mode="In" />
+    <Parameter Name="account" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="update_carparks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="carparkname" Type="varchar" Mode="In" />
+    <Parameter Name="GPS" Type="varchar" Mode="In" />
+    <Parameter Name="spaces" Type="int" Mode="In" />
+    <Parameter Name="rateid" Type="int" Mode="In" />
+    <Parameter Name="providerid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="update_customer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="name" Type="varchar" Mode="In" />
+    <Parameter Name="customername" Type="varchar" Mode="In" />
+    <Parameter Name="customersurname" Type="varchar" Mode="In" />
+    <Parameter Name="customeraddress" Type="varchar" Mode="In" />
+    <Parameter Name="phonenumber" Type="varchar" Mode="In" />
+    <Parameter Name="email" Type="varchar" Mode="In" />
+    <Parameter Name="password" Type="varchar" Mode="In" />
+    <Parameter Name="password_temp" Type="varchar" Mode="In" />
+    <Parameter Name="code" Type="varchar" Mode="In" />
+    <Parameter Name="aktiv" Type="int" Mode="In" />
+    <Parameter Name="remembertoken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="update_customeraccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="customerid" Type="int" Mode="In" />
+    <Parameter Name="parkingid" Type="int" Mode="In" />
+    <Parameter Name="transactiontype" Type="varchar" Mode="In" />
+    <Parameter Name="transactionamount" Type="double" Mode="In" />
+    <Parameter Name="currentbalance" Type="double" Mode="In" />
+    <Parameter Name="transactiondate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="update_parking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="customerid" Type="int" Mode="In" />
+    <Parameter Name="carparkid" Type="int" Mode="In" />
+    <Parameter Name="timein" Type="datetime" Mode="In" />
+    <Parameter Name="timeout" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="update_rates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="ratetypeid" Type="int" Mode="In" />
+    <Parameter Name="rate" Type="double" Mode="In" />
+    <Parameter Name="starttime" Type="time" Mode="In" />
+    <Parameter Name="endtime" Type="time" Mode="In" />
+  </Function>
+  <Function Name="update_ratetype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="type" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="update_vehicle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="tls_db">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="regnum" Type="varchar" Mode="In" />
+    <Parameter Name="make" Type="varchar" Mode="In" />
+    <Parameter Name="model" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="tls_dbModelStoreContainer">
+    <EntitySet Name="carparkprovider" EntityType="Self.carparkprovider" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="carparks" EntityType="Self.carparks" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="customeraccount" EntityType="Self.customeraccount" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="customervehicle" EntityType="Self.customervehicle" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="parking" EntityType="Self.parking" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="rates" EntityType="Self.rates" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="ratetype" EntityType="Self.ratetype" Schema="tls_db" store:Type="Tables" />
+    <EntitySet Name="vehicle" EntityType="Self.vehicle" Schema="tls_db" store:Type="Tables" />
+    <AssociationSet Name="carparks_ibfk_2" Association="Self.carparks_ibfk_2">
+      <End Role="carparkprovider" EntitySet="carparkprovider" />
+      <End Role="carparks" EntitySet="carparks" />
+    </AssociationSet>
+    <AssociationSet Name="carparks_ibfk_3" Association="Self.carparks_ibfk_3">
+      <End Role="rates" EntitySet="rates" />
+      <End Role="carparks" EntitySet="carparks" />
+    </AssociationSet>
+    <AssociationSet Name="customeraccount_ibfk_1" Association="Self.customeraccount_ibfk_1">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="customeraccount" EntitySet="customeraccount" />
+    </AssociationSet>
+    <AssociationSet Name="customeraccount_ibfk_2" Association="Self.customeraccount_ibfk_2">
+      <End Role="parking" EntitySet="parking" />
+      <End Role="customeraccount" EntitySet="customeraccount" />
+    </AssociationSet>
+    <AssociationSet Name="customervehicle_ibfk_1" Association="Self.customervehicle_ibfk_1">
+      <End Role="vehicle" EntitySet="vehicle" />
+      <End Role="customervehicle" EntitySet="customervehicle" />
+    </AssociationSet>
+    <AssociationSet Name="customervehicle_ibfk_2" Association="Self.customervehicle_ibfk_2">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="customervehicle" EntitySet="customervehicle" />
+    </AssociationSet>
+    <AssociationSet Name="parking_ibfk_2" Association="Self.parking_ibfk_2">
+      <End Role="carparks" EntitySet="carparks" />
+      <End Role="parking" EntitySet="parking" />
+    </AssociationSet>
+    <AssociationSet Name="rates_ibfk_2" Association="Self.rates_ibfk_2">
+      <End Role="ratetype" EntitySet="ratetype" />
+      <End Role="rates" EntitySet="rates" />
+    </AssociationSet>
+  </EntityContainer>
 </Schema>

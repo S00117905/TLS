@@ -1,4 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="testModelStoreContainer" CdmEntityContainer="testEntities" />
+  <EntityContainerMapping StorageEntityContainer="tls_dbModelStoreContainer" CdmEntityContainer="tls_dbEntities">
+    <EntitySetMapping Name="carparkproviders">
+      <EntityTypeMapping TypeName="tls_dbModel.carparkprovider">
+        <MappingFragment StoreEntitySet="carparkprovider">
+          <ScalarProperty Name="CarparkProviderID" ColumnName="CarparkProviderID" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="ActiveAccountNum" ColumnName="ActiveAccountNum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="carparks">
+      <EntityTypeMapping TypeName="tls_dbModel.carpark">
+        <MappingFragment StoreEntitySet="carparks">
+          <ScalarProperty Name="CarparkID" ColumnName="CarparkID" />
+          <ScalarProperty Name="CarparkName" ColumnName="CarparkName" />
+          <ScalarProperty Name="GPSLocation" ColumnName="GPSLocation" />
+          <ScalarProperty Name="Spaces" ColumnName="Spaces" />
+          <ScalarProperty Name="RateID" ColumnName="RateID" />
+          <ScalarProperty Name="CarparkProviderID" ColumnName="CarparkProviderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="customers">
+      <EntityTypeMapping TypeName="tls_dbModel.customer">
+        <MappingFragment StoreEntitySet="customer">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="CustomerSurname" ColumnName="CustomerSurname" />
+          <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="password_temp" ColumnName="password_temp" />
+          <ScalarProperty Name="code" ColumnName="code" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+          <ScalarProperty Name="remember_token" ColumnName="remember_token" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="customeraccounts">
+      <EntityTypeMapping TypeName="tls_dbModel.customeraccount">
+        <MappingFragment StoreEntitySet="customeraccount">
+          <ScalarProperty Name="CustomerAccountID" ColumnName="CustomerAccountID" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="ParkingID" ColumnName="ParkingID" />
+          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+          <ScalarProperty Name="TransactionAmount" ColumnName="TransactionAmount" />
+          <ScalarProperty Name="CurrentBalance" ColumnName="CurrentBalance" />
+          <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="parkings">
+      <EntityTypeMapping TypeName="tls_dbModel.parking">
+        <MappingFragment StoreEntitySet="parking">
+          <ScalarProperty Name="ParkingID" ColumnName="ParkingID" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="CarparkID" ColumnName="CarparkID" />
+          <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+          <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rates">
+      <EntityTypeMapping TypeName="tls_dbModel.rate">
+        <MappingFragment StoreEntitySet="rates">
+          <ScalarProperty Name="RateID" ColumnName="RateID" />
+          <ScalarProperty Name="RateTypeID" ColumnName="RateTypeID" />
+          <ScalarProperty Name="Rate1" ColumnName="Rate" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ratetypes">
+      <EntityTypeMapping TypeName="tls_dbModel.ratetype">
+        <MappingFragment StoreEntitySet="ratetype">
+          <ScalarProperty Name="RateTypeID" ColumnName="RateTypeID" />
+          <ScalarProperty Name="RateType1" ColumnName="RateType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vehicles">
+      <EntityTypeMapping TypeName="tls_dbModel.vehicle">
+        <MappingFragment StoreEntitySet="vehicle">
+          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+          <ScalarProperty Name="VehicleRegNum" ColumnName="VehicleRegNum" />
+          <ScalarProperty Name="Make" ColumnName="Make" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="customervehicle" TypeName="tls_dbModel.customervehicle" StoreEntitySet="customervehicle">
+      <EndProperty Name="vehicle">
+        <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+      </EndProperty>
+      <EndProperty Name="customer">
+        <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
 </Mapping>

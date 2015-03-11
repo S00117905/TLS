@@ -12,7 +12,7 @@ namespace camera.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class customeracount
+    public partial class customeraccount
     {
         public int CustomerAccountID { get; set; }
         public int CustomerID { get; set; }

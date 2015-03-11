@@ -1,118 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using camera.DAL;
-using camera.Models;
 
 namespace camera.Controllers
 {
-    public class UsersController : Controller
+    public class ParkingController : Controller
     {
-        private TLSContext db = new TLSContext();
+        private tls_dbEntities db = new tls_dbEntities();
 
-        // GET: Users
+        // GET: Parking
         public ActionResult Index()
         {
-            
-            return View(db.Users.ToList());
+            var parkings = db.parkings.Include(p => p.carpark);
+            return View(parkings.ToList());
         }
 
-        // GET: Users/Details/5
+        // GET: Parking/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            parking parking = db.parkings.Find(id);
+            if (parking == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(parking);
         }
 
-        // GET: Users/Create
+        // GET: Parking/Create
         public ActionResult Create()
         {
+            ViewBag.CarparkID = new SelectList(db.carparks, "CarparkID", "CarparkName");
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Parking/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserID,Name")] User user)
+        public ActionResult Create([Bind(Include = "ParkingID,CustomerID,CarparkID,TimeIn,TimeOut,Duration,Cost")] parking parking)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
+                db.parkings.Add(parking);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            ViewBag.CarparkID = new SelectList(db.carparks, "CarparkID", "CarparkName", parking.CarparkID);
+            return View(parking);
         }
 
-        // GET: Users/Edit/5
+        // GET: Parking/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            parking parking = db.parkings.Find(id);
+            if (parking == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            ViewBag.CarparkID = new SelectList(db.carparks, "CarparkID", "CarparkName", parking.CarparkID);
+            return View(parking);
         }
 
-        // POST: Users/Edit/5
+        // POST: Parking/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserID,Name")] User user)
+        public ActionResult Edit([Bind(Include = "ParkingID,CustomerID,CarparkID,TimeIn,TimeOut,Duration,Cost")] parking parking)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(parking).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            ViewBag.CarparkID = new SelectList(db.carparks, "CarparkID", "CarparkName", parking.CarparkID);
+            return View(parking);
         }
 
-        // GET: Users/Delete/5
+        // GET: Parking/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            parking parking = db.parkings.Find(id);
+            if (parking == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(parking);
         }
 
-        // POST: Users/Delete/5
+        // POST: Parking/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
+            parking parking = db.parkings.Find(id);
+            db.parkings.Remove(parking);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

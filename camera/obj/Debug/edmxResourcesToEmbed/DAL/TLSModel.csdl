@@ -1,4 +1,231 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="testModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityContainer Name="testEntities" annotation:LazyLoadingEnabled="true" />
+<Schema Namespace="tls_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="carparkprovider">
+    <Key>
+      <PropertyRef Name="CarparkProviderID" />
+    </Key>
+    <Property Name="CarparkProviderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ActiveAccountNum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="carparks" Relationship="Self.carparks_ibfk_2" FromRole="carparkprovider" ToRole="carparks" />
+  </EntityType>
+  <EntityType Name="carpark">
+    <Key>
+      <PropertyRef Name="CarparkID" />
+    </Key>
+    <Property Name="CarparkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CarparkName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPSLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Spaces" Type="Int32" Nullable="false" />
+    <Property Name="RateID" Type="Int32" Nullable="false" />
+    <Property Name="CarparkProviderID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="carparkprovider" Relationship="Self.carparks_ibfk_2" FromRole="carparks" ToRole="carparkprovider" />
+    <NavigationProperty Name="rate" Relationship="Self.carparks_ibfk_3" FromRole="carparks" ToRole="rates" />
+    <NavigationProperty Name="parkings" Relationship="Self.parking_ibfk_2" FromRole="carparks" ToRole="parking" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password_temp" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="code" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="active" Type="Int32" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="updated_at" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="remember_token" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="customeraccounts" Relationship="Self.customeraccount_ibfk_1" FromRole="customer" ToRole="customeraccount" />
+    <NavigationProperty Name="vehicle" Relationship="Self.customervehicle" FromRole="customer" ToRole="vehicle" />
+  </EntityType>
+  <EntityType Name="customeraccount">
+    <Key>
+      <PropertyRef Name="CustomerAccountID" />
+    </Key>
+    <Property Name="CustomerAccountID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="ParkingID" Type="Int32" />
+    <Property Name="TransactionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TransactionAmount" Type="Double" Nullable="false" />
+    <Property Name="CurrentBalance" Type="Double" Nullable="false" />
+    <Property Name="TransactionDate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="customer" Relationship="Self.customeraccount_ibfk_1" FromRole="customeraccount" ToRole="customer" />
+    <NavigationProperty Name="parking" Relationship="Self.customeraccount_ibfk_2" FromRole="customeraccount" ToRole="parking" />
+  </EntityType>
+  <EntityType Name="parking">
+    <Key>
+      <PropertyRef Name="ParkingID" />
+    </Key>
+    <Property Name="ParkingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="CarparkID" Type="Int32" Nullable="false" />
+    <Property Name="TimeIn" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TimeOut" Type="DateTime" />
+    <Property Name="Duration" Type="Time" />
+    <Property Name="Cost" Type="Double" />
+    <NavigationProperty Name="carpark" Relationship="Self.parking_ibfk_2" FromRole="parking" ToRole="carparks" />
+    <NavigationProperty Name="customeraccounts" Relationship="Self.customeraccount_ibfk_2" FromRole="parking" ToRole="customeraccount" />
+  </EntityType>
+  <EntityType Name="rate">
+    <Key>
+      <PropertyRef Name="RateID" />
+    </Key>
+    <Property Name="RateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RateTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Rate1" Type="Double" Nullable="false" />
+    <Property Name="StartTime" Type="Time" Nullable="false" />
+    <Property Name="EndTime" Type="Time" Nullable="false" />
+    <NavigationProperty Name="carparks" Relationship="Self.carparks_ibfk_3" FromRole="rates" ToRole="carparks" />
+    <NavigationProperty Name="ratetype" Relationship="Self.rates_ibfk_2" FromRole="rates" ToRole="ratetype" />
+  </EntityType>
+  <EntityType Name="ratetype">
+    <Key>
+      <PropertyRef Name="RateTypeID" />
+    </Key>
+    <Property Name="RateTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RateType1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="rates" Relationship="Self.rates_ibfk_2" FromRole="ratetype" ToRole="rates" />
+  </EntityType>
+  <EntityType Name="vehicle">
+    <Key>
+      <PropertyRef Name="VehicleID" />
+    </Key>
+    <Property Name="VehicleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VehicleRegNum" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Make" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Model" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="customers" Relationship="Self.customervehicle" FromRole="vehicle" ToRole="customer" />
+  </EntityType>
+  <Association Name="carparks_ibfk_2">
+    <End Role="carparkprovider" Type="Self.carparkprovider" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="carparks" Type="Self.carpark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="carparkprovider">
+        <PropertyRef Name="CarparkProviderID" />
+      </Principal>
+      <Dependent Role="carparks">
+        <PropertyRef Name="CarparkProviderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="carparks_ibfk_3">
+    <End Role="rates" Type="Self.rate" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="carparks" Type="Self.carpark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rates">
+        <PropertyRef Name="RateID" />
+      </Principal>
+      <Dependent Role="carparks">
+        <PropertyRef Name="RateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="parking_ibfk_2">
+    <End Role="carparks" Type="Self.carpark" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="parking" Type="Self.parking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="carparks">
+        <PropertyRef Name="CarparkID" />
+      </Principal>
+      <Dependent Role="parking">
+        <PropertyRef Name="CarparkID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customeraccount_ibfk_1">
+    <End Role="customer" Type="Self.customer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="customeraccount">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customeraccount_ibfk_2">
+    <End Role="parking" Type="Self.parking" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="parking">
+        <PropertyRef Name="ParkingID" />
+      </Principal>
+      <Dependent Role="customeraccount">
+        <PropertyRef Name="ParkingID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="rates_ibfk_2">
+    <End Role="ratetype" Type="Self.ratetype" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="rates" Type="Self.rate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ratetype">
+        <PropertyRef Name="RateTypeID" />
+      </Principal>
+      <Dependent Role="rates">
+        <PropertyRef Name="RateTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="customervehicle">
+    <End Role="vehicle" Type="Self.vehicle" Multiplicity="0..1" />
+    <End Role="customer" Type="Self.customer" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="tls_dbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="carparkproviders" EntityType="Self.carparkprovider" />
+    <EntitySet Name="carparks" EntityType="Self.carpark" />
+    <EntitySet Name="customers" EntityType="Self.customer" />
+    <EntitySet Name="customeraccounts" EntityType="Self.customeraccount" />
+    <EntitySet Name="parkings" EntityType="Self.parking" />
+    <EntitySet Name="rates" EntityType="Self.rate" />
+    <EntitySet Name="ratetypes" EntityType="Self.ratetype" />
+    <EntitySet Name="vehicles" EntityType="Self.vehicle" />
+    <AssociationSet Name="carparks_ibfk_2" Association="Self.carparks_ibfk_2">
+      <End Role="carparkprovider" EntitySet="carparkproviders" />
+      <End Role="carparks" EntitySet="carparks" />
+    </AssociationSet>
+    <AssociationSet Name="carparks_ibfk_3" Association="Self.carparks_ibfk_3">
+      <End Role="rates" EntitySet="rates" />
+      <End Role="carparks" EntitySet="carparks" />
+    </AssociationSet>
+    <AssociationSet Name="parking_ibfk_2" Association="Self.parking_ibfk_2">
+      <End Role="carparks" EntitySet="carparks" />
+      <End Role="parking" EntitySet="parkings" />
+    </AssociationSet>
+    <AssociationSet Name="customeraccount_ibfk_1" Association="Self.customeraccount_ibfk_1">
+      <End Role="customer" EntitySet="customers" />
+      <End Role="customeraccount" EntitySet="customeraccounts" />
+    </AssociationSet>
+    <AssociationSet Name="customeraccount_ibfk_2" Association="Self.customeraccount_ibfk_2">
+      <End Role="parking" EntitySet="parkings" />
+      <End Role="customeraccount" EntitySet="customeraccounts" />
+    </AssociationSet>
+    <AssociationSet Name="rates_ibfk_2" Association="Self.rates_ibfk_2">
+      <End Role="ratetype" EntitySet="ratetypes" />
+      <End Role="rates" EntitySet="rates" />
+    </AssociationSet>
+    <AssociationSet Name="customervehicle" Association="Self.customervehicle">
+      <End Role="vehicle" EntitySet="vehicles" />
+      <End Role="customer" EntitySet="customers" />
+    </AssociationSet>
+  </EntityContainer>
 </Schema>

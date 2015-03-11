@@ -1,126 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using camera.DAL;
-using camera.Models;
 
 namespace camera.Controllers
 {
-    public class TicketsController : Controller
+    public class CarparkprovidersController : Controller
     {
-        private TLSContext db = new TLSContext();
+        private tls_dbEntities db = new tls_dbEntities();
 
-        // GET: Tickets
+        // GET: Carparkproviders
         public ActionResult Index()
         {
-            var tickets = db.Tickets.Include(t => t.Location).Include(t => t.User);
-            return View(tickets.ToList());
+            return View(db.carparkproviders.ToList());
         }
 
-        // GET: Tickets/Details/5
+        // GET: Carparkproviders/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
+            carparkprovider carparkprovider = db.carparkproviders.Find(id);
+            if (carparkprovider == null)
             {
                 return HttpNotFound();
             }
-            return View(ticket);
+            return View(carparkprovider);
         }
 
-        // GET: Tickets/Create
+        // GET: Carparkproviders/Create
         public ActionResult Create()
         {
-            ViewBag.LocationID = new SelectList(db.Locations, "LocationID", "Title");
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name");
             return View();
         }
 
-        // POST: Tickets/Create
+        // POST: Carparkproviders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TicketID,LocationID,UserID,EntryTime,ExitTime,Total")] Ticket ticket)
+        public ActionResult Create([Bind(Include = "CarparkProviderID,ProviderName,ActiveAccountNum")] carparkprovider carparkprovider)
         {
             if (ModelState.IsValid)
             {
-                db.Tickets.Add(ticket);
+                db.carparkproviders.Add(carparkprovider);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.LocationID = new SelectList(db.Locations, "LocationID", "Title", ticket.LocationID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", ticket.UserID);
-            return View(ticket);
+            return View(carparkprovider);
         }
 
-        // GET: Tickets/Edit/5
+        // GET: Carparkproviders/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
+            carparkprovider carparkprovider = db.carparkproviders.Find(id);
+            if (carparkprovider == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.LocationID = new SelectList(db.Locations, "LocationID", "Title", ticket.LocationID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", ticket.UserID);
-            return View(ticket);
+            return View(carparkprovider);
         }
 
-        // POST: Tickets/Edit/5
+        // POST: Carparkproviders/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TicketID,LocationID,UserID,EntryTime,ExitTime,Total")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "CarparkProviderID,ProviderName,ActiveAccountNum")] carparkprovider carparkprovider)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ticket).State = EntityState.Modified;
+                db.Entry(carparkprovider).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.LocationID = new SelectList(db.Locations, "LocationID", "Title", ticket.LocationID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Name", ticket.UserID);
-            return View(ticket);
+            return View(carparkprovider);
         }
 
-        // GET: Tickets/Delete/5
+        // GET: Carparkproviders/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
+            carparkprovider carparkprovider = db.carparkproviders.Find(id);
+            if (carparkprovider == null)
             {
                 return HttpNotFound();
             }
-            return View(ticket);
+            return View(carparkprovider);
         }
 
-        // POST: Tickets/Delete/5
+        // POST: Carparkproviders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Ticket ticket = db.Tickets.Find(id);
-            db.Tickets.Remove(ticket);
+            carparkprovider carparkprovider = db.carparkproviders.Find(id);
+            db.carparkproviders.Remove(carparkprovider);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

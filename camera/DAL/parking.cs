@@ -16,7 +16,7 @@ namespace camera.DAL
     {
         public parking()
         {
-            this.customeracounts = new HashSet<customeracount>();
+            this.customeraccounts = new HashSet<customeraccount>();
         }
     
         public int ParkingID { get; set; }
@@ -28,6 +28,6 @@ namespace camera.DAL
         public Nullable<double> Cost { get; set; }
     
         public virtual carpark carpark { get; set; }
-        public virtual ICollection<customeracount> customeracounts { get; set; }
+        public virtual ICollection<customeraccount> customeraccounts { get; set; }
     }
 }
